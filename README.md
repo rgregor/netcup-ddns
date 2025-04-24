@@ -11,10 +11,12 @@ A drop dead simple and lightweight Python3 client, that...
 
 ## Installation
 - to install for development, run `setup_dev_venv.sh`
-- to run: `setup_exec_venv.sh`
+- to install for execution, run: `setup_exec_venv.sh`
+- to install and enable a systemd service, run `install_service_for_current_user.sh` 
 
 ## Usage
 - setup your credentials and configuration details in `netcup-ddns.conf`
+- change permissions: `chmod go-rwx netcup-ddns.conf`
 - run `update_ddns_subdomain.py` in a venv with dependencies installed
    - the program can be stopped with kill / SIGTERM / SIGHUP or CTRL-C
 
