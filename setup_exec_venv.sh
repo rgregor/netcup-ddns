@@ -29,5 +29,8 @@ echo -e """
   Setup complete. Virtual environment is ready.
   To run:
 
-  $VENV_DIR/bin/python3 update_ddns_subdomain.py
+  source $VENV_DIR/bin/activate && ./update_ddns_subdomain.py
+
+  or to only activate the venv in a temporary subshell:
+  ( source $VENV_DIR/bin/activate && ./update_ddns_subdomain.py )
   """
