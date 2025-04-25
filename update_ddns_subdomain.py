@@ -1,4 +1,5 @@
 #!/bin/env python3
+import argparse
 import ipaddress
 import logging
 import logging.handlers
@@ -65,7 +66,7 @@ class Config:
         self.ddns_config = config_parser.parse_section(using_dataclass=DDNSConfig)
 
 
-class DNSRecordSource:
+class DNSRecordManager:
 
     @staticmethod
     def _run_fetch_cmd(cmd: str) -> Optional[str]:
@@ -200,11 +201,11 @@ def match_and_update_records(new_records: List[DNSRecord], current_records: List
     return updated_records, unmatched_records
 
 
-def run_main_loop(config: Config, record_source: DNSRecordSource):
+def run_main_loop(config: Config, record_source: DNSRecordManager, one_shot: bool=False):
     previous_records: List[DNSRecord] = []
     new_records: List[DNSRecord] = previous_records
 
-    while True:
+    while not one_shot:
         try:
             if new_records == previous_records:
                 if len(previous_records) != 0: log.info("waiting for changed records")
@@ -268,15 +269,25 @@ def handle_sighup(signum, frame):
     log.debug("Received SIGHUP. Shutting down gracefully...")
     raise InterruptedError("Shutdown requested by SIGHUP")
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='A script with a one-shot boolean option.')
+
+    # Add the one-shot option as a boolean flag
+    # When present, it will be True; when absent, it will be False
+    parser.add_argument('--one-shot', '-o', action='store_true',
+                        help='Enable one-shot mode')
+
+    return parser.parse_args()
 
 def main():
     # Register signal handlers
     signal.signal(signal.SIGHUP, handle_sighup)
     signal.signal(signal.SIGTERM, handle_sigterm)
+    args = parse_arguments()
     try:
         _config = Config('netcup-ddns.conf')
         log.setLevel(_config.general_config.log_level)
-        run_main_loop(_config, DNSRecordSource(_config))
+        run_main_loop(_config, DNSRecordManager(_config), args.one_shot)
     except (InterruptedError, KeyboardInterrupt) as ie:
         log.info("Exiting")
         sys.exit(0)
