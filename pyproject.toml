@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "netcup-ddns"
 version = "0.2024.09.04"
 description = "A Python script to interact with the Netcup DNS API with strict TLS certificate verification."
-authors = [ { name="Robert Gregor", email="gimpel@gwire.de" } ]
+authors = [ { name="Robert Gregor", email="r.gregor@protonmail.com" } ]
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text="GPL v3" }
