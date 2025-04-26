@@ -1,8 +1,9 @@
 # netcup-api-ddns
-A drop dead simple and lightweight Python3 client, that...
+A simple and relatively lightweight Python3 client, that...
 - uses Netcups DNS API to use a subdomain for DynDNS
 - works with IPv4 and IPv6
 - is based on nc_dnsapi from https://github.com/nbuchwitz/nc_dnsapi
+- comes with setup scripts for running it with systemd and installer scripts for setting up the required environments
 
 ## Prerequisites
 - Python >= 3.11 with pip
@@ -12,7 +13,8 @@ A drop dead simple and lightweight Python3 client, that...
 ## Installation
 - to install for development, run `setup_dev_venv.sh`
 - to install for execution, run: `setup_exec_venv.sh`
-- to install and enable a systemd service, run `install_service_for_current_user.sh` 
+- to install and enable a systemd service, run `sudo setup_service_for_current_user.sh` 
+- note: the service installer by default will make the service run under your current (sudoing user) you may modify the behaviour in the setup script
 
 ## Usage
 - setup your credentials and configuration details in `netcup-ddns.conf`

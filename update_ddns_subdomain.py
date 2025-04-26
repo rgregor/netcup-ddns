@@ -48,13 +48,9 @@ class Config:
 
     @staticmethod
     def _fail_if_world_readable(filename: str):
-        """Check if a file is not readable by group or others."""
-        mode = os.stat(filename).st_mode
-        group_read = mode & stat.S_IRGRP
-        others_read = mode & stat.S_IROTH
-
-        if group_read or others_read:
-            log.fatal(f"Configuration file: {filename=} is group or world readable.. please change permissions as this file contains sensitive credentials, e.g. via:\nchmod go-rwx {filename}")
+        """Check if a file is not readable by others."""
+        if os.stat(filename).st_mode & stat.S_IROTH:
+            log.fatal(f"Configuration file: {filename=} is world readable.. please change permissions as this file contains sensitive credentials, e.g. via:\nchmod go-rwx {filename}")
             exit(127)
 
     def __init__(self, filename: str):
